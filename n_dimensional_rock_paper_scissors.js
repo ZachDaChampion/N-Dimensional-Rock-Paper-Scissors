@@ -54,6 +54,7 @@ function submit_choices() {
   let new_letter = String.fromCharCode(65 + player_inputs.length);
   player_label.innerHTML = "Enter player " + new_letter + "'s choices";
   player_choices.name = "Player " + new_letter + "'s choices";
+  player_choices.value = '';
 }
 
 function submit_all() {
