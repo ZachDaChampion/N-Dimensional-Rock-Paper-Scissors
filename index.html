@@ -30,29 +30,19 @@
     <p>Make sure your opponent doesn't see what you type!</p>
 
     <hr>
+    
+    <h2 id="player_label">Enter player A's choices</h2>
 
-    <div id=div_player_a>
-      <h2>Enter player A's choices</h2>
+    <span>
+      <textarea name="Player A's choices" id="player_choices" cols="69" rows="2"></textarea>
+      <button type="button" onclick="submit_choices()" style="margin-left: 12px;">Submit Player Choices</button>
+    </span>
 
-      <span>
-        <textarea name="Player A's choices" id="textarea_player_a" cols="69" rows="2"></textarea>
-        <button type="button" onclick="submit_a()">Submit</button>
-      </span>
-
-    </div>
-
-    <div id=div_player_b style="display: none;">
-      <h2>Enter player B's choices</h2>
-
-      <span>
-        <textarea name="Player B's choices" id="textarea_player_b" cols="69" rows="2"></textarea>
-        <button type="button" onclick="submit_b()">Submit</button>
-      </span>
-    </div>
+    <button type="button" onclick="submit_all()" style="display: block; margin-top: 24px;">Calculate Winner</button>
 
     <div id=div_result style='display: none;'>
       <h2 id=h3_result>Draw!</h2>
-      <p id=p_score>Score: 0</p>
+      <p id=p_scores></p>
     </div>
 
   </body>

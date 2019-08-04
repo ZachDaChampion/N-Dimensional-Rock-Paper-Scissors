@@ -5,16 +5,13 @@ let plays = {
   scissor: 2
 };
 
-let div_player_a = document.getElementById('div_player_a');
-let textarea_player_a = document.getElementById('textarea_player_a');
-let div_player_b = document.getElementById('div_player_b');
-let textarea_player_b = document.getElementById('textarea_player_b');
-let div_result = document.getElementById('div_result');
+let player_label = document.getElementById('player_label');
+let player_choices = document.getElementById('player_choices');
+let results_div = document.getElementById('div_result');
 let h3_result = document.getElementById('h3_result');
-let p_score = document.getElementById('p_score');
+let p_scores = document.getElementById('p_scores');
 
-let a_input = [];
-let b_input = [];
+let player_inputs = [];
 
 function eval_match(_a, _b) {
 
@@ -26,7 +23,7 @@ function eval_match(_a, _b) {
   return -1;
 }
 
-function run_full_match(a_list, b_list) {
+function run_pair(a_list, b_list) {
 
   let score = 0;
 
@@ -36,24 +33,45 @@ function run_full_match(a_list, b_list) {
     }
   }
 
-  if (score > 0) h3_result.innerHTML = 'Player A Wins!';
-  else if (score < 0) h3_result.innerHTML = 'Player B Wins!';
-  else h3_result.innerHTML = 'Draw!';
-
   return score;
 }
 
-function submit_a() {
-  a_input = textarea_player_a.value.split(' ').filter(function (el) {return el || el === 0;});
-  div_player_a.style.display = 'none';
-  div_player_b.style.display = 'block';
+function run_full_match(lists) {
+
+  let scores = {};
+
+  for (let playera = 0; playera < player_inputs.length; playera++) {
+    scores[String.fromCharCode(65 + playera)] = 0;
+    for (let playerb = 0; playerb < player_inputs.length; playerb++) {
+      if (playera != playerb) scores[String.fromCharCode(65 + playera)] += run_pair(player_inputs[playera], player_inputs[playerb]);
+    }
+  }
+  return scores;
 }
-function submit_b() {
-  b_input = textarea_player_b.value.split(' ').filter(function (el) {return el || el === 0;});
-  div_player_b.style.display = 'none';
-  let score = run_full_match(a_input, b_input);
-  p_score.innerHTML = 'Score: ' + score;
-  div_player_a.style.display = 'block';
-  div_player_b.style.display = 'block';
+
+function submit_choices() {
+  player_inputs.push(player_choices.value.split(' ').filter(function (el) {return el || el === 0;}));
+  let new_letter = String.fromCharCode(65 + player_inputs.length);
+  player_label.innerHTML = "Enter player " + new_letter + "'s choices";
+  player_choices.name = "Player " + new_letter + "'s choices";
+}
+
+function submit_all() {
+  let scores = run_full_match(player_inputs);
+  let keysSorted = Object.keys(scores).sort(function(x,y){return scores[y]-scores[x]});
+  console.log(scores, keysSorted);
+  let winners = [];
+  let score = scores[keysSorted[0]];
+  for (let i = 0; i < keysSorted.length; i++) {
+    if (scores[keysSorted[i]] == score) winners.push(keysSorted[i]);
+    else break;
+  }
+  h3_result.innerHTML = "Winners: " + winners.join(', ');
+  if (winners.length == keysSorted.length) h3_result.innerHTML = "Draw between everyone";
+  let results_text = '';
+  for (let i = 0; i < keysSorted.length; i++) {
+    results_text += keysSorted[i] + ': ' + scores[keysSorted[i]] + '<br>';
+  }
+  p_scores.innerHTML = results_text;
   div_result.style.display = 'block';
 }
